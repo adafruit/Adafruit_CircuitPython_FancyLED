@@ -34,6 +34,10 @@ __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 
 
+# Function names are kept the same as FastLED, which normally upsets pylint.
+# Disable name-checking so this passes muster.
+# pylint: disable=invalid-name
+
 """
 FancyLED is sort of a mild CircuitPython interpretation of a subset
 of the FastLED library for Arduino.  This is mainly to assist with
@@ -84,13 +88,13 @@ def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
         # fall back on the RGB tuple case.
         try:
             if inplace:
-                for i in range(len(n)):
+                for i in enumerate(n):
                     n[i] = applyGamma_video(n[i], g_r, g_g, g_b)
-            else:
-                newlist = []
-                for i in n:
-                    newlist += applyGamma_video(i, g_r, g_g, g_b)
-                return newlist
+                return None
+            newlist = []
+            for i in n:
+                newlist += applyGamma_video(i, g_r, g_g, g_b)
+            return newlist
         except TypeError:
             if g_g is None:
                 g_g = g_r
@@ -100,10 +104,10 @@ def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
                 n[0] = applyGamma_video(n[0], g_r)
                 n[1] = applyGamma_video(n[1], g_g)
                 n[2] = applyGamma_video(n[2], g_b)
-            else:
-                return [applyGamma_video(n[0], g_r),
-                        applyGamma_video(n[1], g_g),
-                        applyGamma_video(n[2], g_b)]
+                return None
+            return [applyGamma_video(n[0], g_r),
+                    applyGamma_video(n[1], g_g),
+                    applyGamma_video(n[2], g_b)]
 
 
 def napplyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None):
@@ -266,3 +270,6 @@ def hsv2rgb_spectrum(hsv):
     return [(((((r * sat1) >> 8) + sat2) * val1) >> 8) & 0xFF,
             (((((g * sat1) >> 8) + sat2) * val1) >> 8) & 0xFF,
             (((((b * sat1) >> 8) + sat2) * val1) >> 8) & 0xFF]
+
+
+# pylint: enable=invalid-name
