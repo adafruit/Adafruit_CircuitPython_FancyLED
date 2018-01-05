@@ -1,7 +1,7 @@
 # Simple FancyLED example for Circuit Playground Express
 
 from adafruit_circuitplayground.express import cpx
-import adafruit_fancyled as fancy
+import adafruit_circuitpython_fancyled as fancy
 
 # A dynamic gradient palette is a compact representation of a color palette
 # that lists only the key points (specific positions and colors), which are
