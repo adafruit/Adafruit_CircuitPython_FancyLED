@@ -2,9 +2,9 @@
 Introduction
 ============
 
-.. image:: https://readthedocs.org/projects/adafruit-circuitpython-circuitpython_fancyled/badge/?version=latest
+.. image:: https://readthedocs.org/projects/adafruit-circuitpython-fancyled/badge/?version=latest
 
-    :target: https://circuitpython.readthedocs.io/projects/circuitpython_fancyled/en/latest/
+    :target: https://circuitpython.readthedocs.io/projects/fancyled/en/latest/
 
     :alt: Documentation Status
 
@@ -41,7 +41,7 @@ Contributing
 ============
 
 Contributions are welcome! Please read our `Code of Conduct
-<https://github.com/Adafruit/Adafruit_CircuitPython_CircuitPython_FancyLED/blob/master/CODE_OF_CONDUCT.md>`_
+<https://github.com/PaintYourDragon/Adafruit_CircuitPython_fancyled/blob/master/CODE_OF_CONDUCT.md>`_
 before contributing to help this project stay welcoming.
 
 Building locally
@@ -66,4 +66,4 @@ Then run the build:
 
 .. code-block:: shell
 
-    circuitpython-build-bundles --filename_prefix adafruit-circuitpython-circuitpython_fancyled --library_location .
+    circuitpython-build-bundles --filename_prefix adafruit-circuitpython-fancyled --library_location .

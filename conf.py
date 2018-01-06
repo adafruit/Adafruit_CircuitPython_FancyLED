@@ -31,7 +31,7 @@ source_suffix = '.rst'
 master_doc = 'README'
 
 # General information about the project.
-project = u'Adafruit CircuitPython_FancyLED Library'
+project = u'Adafruit fancyled Library'
 copyright = u'2017 PaintYourDragon'
 author = u'PaintYourDragon'
 
@@ -96,7 +96,7 @@ else:
 html_static_path = ['_static']
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'AdafruitCircuitpython_fancyledLibrarydoc'
+htmlhelp_basename = 'AdafruitFancyledLibrarydoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -122,7 +122,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'AdafruitCircuitPython_FancyLEDLibrary.tex', u'AdafruitCircuitPython_FancyLED Library Documentation',
+    (master_doc, 'AdafruitfancyledLibrary.tex', u'Adafruitfancyled Library Documentation',
      author, 'manual'),
 ]
 
@@ -131,7 +131,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'AdafruitCircuitPython_FancyLEDlibrary', u'Adafruit CircuitPython_FancyLED Library Documentation',
+    (master_doc, 'Adafruitfancyledlibrary', u'Adafruit fancyled Library Documentation',
      [author], 1)
 ]
 
@@ -141,7 +141,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'AdafruitCircuitPython_FancyLEDLibrary', u'Adafruit CircuitPython_FancyLED Library Documentation',
-     author, 'AdafruitCircuitPython_FancyLEDLibrary', 'One line description of project.',
+    (master_doc, 'AdafruitfancyledLibrary', u'Adafruit fancyled Library Documentation',
+     author, 'AdafruitfancyledLibrary', 'One line description of project.',
      'Miscellaneous'),
 ]
