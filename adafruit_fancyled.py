@@ -36,15 +36,13 @@ __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 from math import floor
 
 
-"""
-FancyLED provides color- and palette-related utilities for LED projects,
-offering a buttery smooth look instead of the usual 8-bit-like "blip blip"
-effects often seen with LEDs.  It's loosely inspired by, but NOT a drop-in
-replacement for, the FastLED library for Arduino.
-"""
+# FancyLED provides color- and palette-related utilities for LED projects,
+# offering a buttery smooth look instead of the usual 8-bit-like "blip blip"
+# effects often seen with LEDs.  It's loosely inspired by, but NOT a drop-in
+# replacement for, the FastLED library for Arduino.
 
 
-class CRGB:
+class CRGB(object):
     """ RGB (red, green, blue) color class.
     """
 
@@ -67,9 +65,9 @@ class CRGB:
             # If first/only argument is a CHSV type, perform HSV to RGB
             # conversion.
             hsv = red           # 'red' is CHSV, this is just more readable
-            h = hsv.hue * 6.0   # Hue circle = 0.0 to 6.0
-            sxt = floor(h)      # Sextant index is next-lower integer of hue
-            frac = h - sxt      # Fraction-within-sextant is 0.0 to <1.0
+            hue = hsv.hue * 6.0 # Hue circle = 0.0 to 6.0
+            sxt = floor(hue)    # Sextant index is next-lower integer of hue
+            frac = hue - sxt    # Fraction-within-sextant is 0.0 to <1.0
             sxt = int(sxt) % 6  # mod6 the sextant so it's always 0 to 5
 
             if sxt == 0: # Red to <yellow
@@ -112,7 +110,7 @@ class CRGB:
         return "(%s, %s, %s)" % (self.red, self.green, self.blue)
 
 
-class CHSV:
+class CHSV(object):
     """ HSV (hue, saturation, value) color class.
     """
 
@@ -220,7 +218,7 @@ def pack(val):
 
     # Convert CHSV input to CRGB if needed
     if isinstance(val, CHSV):
-       val = CRGB(val)
+        val = CRGB(val)
 
     return ((denormalize(val.red) << 16) |
             (denormalize(val.green) << 8) |
@@ -323,7 +321,7 @@ def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
             gamma_value = GFACTOR
         return pow(val, gamma_value) * brightness
 
-    if isinstance(val, list) or isinstance(val, tuple):
+    if isinstance(val, (list, tuple)):
         # List or tuple of values
         if isinstance(val[0], float):
             # Input appears to be a list of floats
@@ -341,27 +339,17 @@ def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
         # but first determine gamma-correction factors for R,G,B:
         if gamma_value is None:
             # No gamma specified, use default
-            gamma_red = GFACTOR
-            gamma_green = GFACTOR
-            gamma_blue = GFACTOR
+            gamma_red, gamma_green, gamma_blue = GFACTOR, GFACTOR, GFACTOR
         elif isinstance(gamma_value, float):
             # Single gamma value provided, apply to R,G,B
-            gamma_red = gamma_value
-            gamma_green = gamma_value
-            gamma_blue = gamma_value
+            gamma_red, gamma_green, gamma_blue = gamma_value, gamma_value, gamma_value
         else:
-            gamma_red = gamma_value[0]
-            gamma_green = gamma_value[1]
-            gamma_blue = gamma_value[2]
+            gamma_red, gamma_green, gamma_blue = gamma_value[0], gamma_value[1], gamma_value[2]
         if isinstance(brightness, float):
             # Single brightness value provided, apply to R,G,B
-            brightness_red = brightness
-            brightness_green = brightness
-            brightness_blue = brightness
+            brightness_red, brightness_green, brightness_blue = brightness, brightness, brightness
         else:
-            brightness_red = brightness[0]
-            brightness_green = brightness[1]
-            brightness_blue = brightness[2]
+            brightness_red, brightness_green, brightness_blue = brightness[0], brightness[1], brightness[2]
         if inplace:
             for i, x in enumerate(val):
                 if isinstance(x, CHSV):
@@ -382,27 +370,17 @@ def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
     # Single CRGB or CHSV value
     if gamma_value is None:
         # No gamma specified, use default
-        gamma_red = GFACTOR
-        gamma_green = GFACTOR
-        gamma_blue = GFACTOR
+        gamma_red, gamma_green, gamma_blue = GFACTOR, GFACTOR, GFACTOR
     elif isinstance(gamma_value, float):
         # Single gamma value provided, apply to R,G,B
-        gamma_red = gamma_value
-        gamma_green = gamma_value
-        gamma_blue = gamma_value
+        gamma_red, gamma_green, gamma_blue = gamma_value, gamma_value, gamma_value
     else:
-        gamma_red = gamma_value[0]
-        gamma_green = gamma_value[1]
-        gamma_blue = gamma_value[2]
+        gamma_red, gamma_green, gamma_blue = gamma_value[0], gamma_value[1], gamma_value[2]
     if isinstance(brightness, float):
         # Single brightness value provided, apply to R,G,B
-        brightness_red = brightness
-        brightness_green = brightness
-        brightness_blue = brightness
+        brightness_red, brightness_green, brightness_blue = brightness, brightness, brightness
     else:
-        brightness_red = brightness[0]
-        brightness_green = brightness[1]
-        brightness_blue = brightness[2]
+        brightness_red, brightness_green, brightness_blue = brightness[0], brightness[1], brightness[2]
 
     if isinstance(val, CHSV):
         val = CRGB(val)
@@ -432,7 +410,7 @@ def palette_lookup(pal, pos):
     return mix(color1, color2, weight2)
 
 
-def expand_gradient(grad, len):
+def expand_gradient(grad, length):
     """ Convert gradient palette into standard equal-interval palette.
     ACCEPTS: List or tuple of of 2-element lists/tuples containing position
              (0.0 to 1.0) and color (packed int, CRGB or CHSV).  It's OK if
@@ -446,8 +424,8 @@ def expand_gradient(grad, len):
     most = grad[-1][0]  # Highest position value (ostensibly 1.0)
     newlist = []
 
-    for i in range(len):
-        pos = i / float(len - 1)  # 0.0 to 1.0 in 'len' steps
+    for i in range(length):
+        pos = i / float(length - 1)  # 0.0 to 1.0 in 'length' steps
         # Determine indices in list of item 'below' and 'above' pos
         if pos <= least:
             # Off bottom of list - use lowest index
