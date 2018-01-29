@@ -3,14 +3,16 @@ Introduction
 ============
 
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-fancyled/badge/?version=latest
-
     :target: https://circuitpython.readthedocs.io/projects/fancyled/en/latest/
-
     :alt: Documentation Status
 
 .. image :: https://img.shields.io/discord/327254708534116352.svg
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
+
+.. image:: https://travis-ci.org/adafruit/Adafruit_CircuitPython_FancyLED.svg?branch=master
+    :target: https://travis-ci.org/adafruit/Adafruit_CircuitPython_FancyLED
+    :alt: Build Status
 
 TODO
 

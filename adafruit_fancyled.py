@@ -43,24 +43,23 @@ from math import floor
 
 
 class CRGB(object):
-    """ RGB (red, green, blue) color class.
+    """Color stored in Red, Green, Blue color space.
+
+       One of two ways: separate red, gren, blue values (either as integers (0 to 255
+       range) or floats (0.0 to 1.0 range), either type is 'clamped' to valid range and
+       stored internally in the normalized (float) format), OR can accept a CHSV color as
+       input, which will be converted and stored in RGB format.
+
+       Following statements are equivalent - all return red:
+
+       .. code-block:: python
+
+             c = CRGB(255, 0, 0)
+             c = CRGB(1.0, 0.0, 0.0)
+             c = CRGB(CHSV(0.0, 1.0, 1.0))
     """
 
     def __init__(self, red, green=0.0, blue=0.0):
-        """ Constructor for CRGB class.
-        ACCEPTS: One of two ways: separate red, gren, blue values (either
-                 as integers (0 to 255 range) or floats (0.0 to 1.0 range),
-                 either type is 'clamped' to valid range and stored
-                 internally in the normalized (float) format),
-                 OR can accept a CHSV color as input, which will be
-                 converted and stored in RGB format.
-                 Following statements are equivalent - all return red:
-                 c = CRGB(255, 0, 0)
-                 c = CRGB(1.0, 0.0, 0.0)
-                 c = CRGB(CHSV(0.0, 1.0, 1.0))
-        RETURNS: CRGB instance.
-        """
-
         if isinstance(red, CHSV):
             # If first/only argument is a CHSV type, perform HSV to RGB
             # conversion.
@@ -111,27 +110,24 @@ class CRGB(object):
 
 
 class CHSV(object):
-    """ HSV (hue, saturation, value) color class.
-    """
+    """Color stored in Hue, Saturation, Value color space.
 
-    def __init__(self, h, s=1.0, v=1.0):
-        """ Constructor for CHSV color class.
-        ACCEPTS: hue as float (any range) or integer (0-256 -> 0.0-1.0)
-                 with no clamping performed (hue can 'wrap around'),
-                 saturation and value as float (0.0 to 1.0) or integer
-                 (0 to 255), both are clamped and stored internally in
-                 the normalized (float) format.  Latter two are optional,
-                 can pass juse hue and saturation/value will default to 1.0.
-                 Unlike CRGB (which can take a CHSV as input), there's
-                 currently no equivalent RGB-to-HSV conversion, mostly
-                 because it's a bit like trying to reverse a hash...
-                 there may be multiple HSV solutions for a given RGB input.
-                 This might be OK as long as conversion precedence is
-                 documented, but otherwise (and maybe still) could cause
-                 confusion as certain HSV->RGB->HSV translations won't
-                 have the same input and output.  Hmmm.
+       Accepts hue as float (any range) or integer (0-256 -> 0.0-1.0) with no clamping
+       performed (hue can 'wrap around'), saturation and value as float (0.0 to 1.0) or
+       integer (0 to 255), both are clamped and stored internally in the normalized (float)
+       format.  Latter two are optional, can pass juse hue and saturation/value will
+       default to 1.0.
+
+       Unlike `CRGB` (which can take a `CHSV` as input), there's currently no equivalent
+       RGB-to-HSV conversion, mostly because it's a bit like trying to reverse a hash...
+       there may be multiple HSV solutions for a given RGB input.
+
+       This might be OK as long as conversion precedence is documented, but otherwise (and
+       maybe still) could cause confusion as certain HSV->RGB->HSV translations won't have
+       the same input and output.  Hmmm.
         """
 
+    def __init__(self, h, s=1.0, v=1.0):
         if isinstance(h, float):
             self.hue = h  # Don't clamp! Hue can wrap around forever.
         else:
@@ -153,18 +149,17 @@ class CHSV(object):
 
 
 def clamp(val, lower, upper):
-    """ Constrain value within a numeric range (inclusive).
+    """Constrain value within a numeric range (inclusive).
     """
     return max(lower, min(val, upper))
 
 
 def normalize(val, inplace=False):
-    """ Convert 8-bit (0 to 255) value to normalized (0.0 to 1.0) value.
-    ACCEPTS: integer, 0 to 255 range (input is clamped) or a list or tuple
-             of integers.  In list case, 'inplace' can be used to control
-             whether the original list is modified (True) or a new list
-             is generated and returned (False).
-    RETURNS: float, 0.0 to 1.0 range, or list of floats (or None if inplace).
+    """Convert 8-bit (0 to 255) value to normalized (0.0 to 1.0) value.
+
+       Accepts integer, 0 to 255 range (input is clamped) or a list or tuple of integers.  In list case, 'inplace' can be used to control whether the original list is modified (True) or a new list is generated and returned (False).
+
+       Returns float, 0.0 to 1.0 range, or list of floats (or None if inplace).
     """
 
     if isinstance(val, int):
@@ -183,12 +178,13 @@ def normalize(val, inplace=False):
 
 
 def denormalize(val, inplace=False):
-    """ Convert normalized (0.0 to 1.0) value to 8-bit (0 to 255) value
-    ACCEPTS: float, 0.0 to 1.0 range or a list or tuple of floats.  In list
-             case, 'inplace' can be used to control whether the original
-             list is modified (True) or a new list is generated and returned
-             (False).
-    RETURNS: integer, 0 to 255 range, or list of integers (or None if inplace).
+    """Convert normalized (0.0 to 1.0) value to 8-bit (0 to 255) value
+
+       Accepts float, 0.0 to 1.0 range or a list or tuple of floats.  In list case,
+       'inplace' can be used to control whether the original list is modified (True) or a
+       new list is generated and returned (False).
+
+       Returns integer, 0 to 255 range, or list of integers (or None if inplace).
     """
 
     # 'Denormalizing' math varies slightly from normalize().  This is on
@@ -211,9 +207,10 @@ def denormalize(val, inplace=False):
 
 
 def pack(val):
-    """ 'Pack' a CRGB or CHSV color into a 24-bit RGB integer.
-    ACCEPTS: CRGB or CHSV color.
-    RETURNS: 24-bit integer a la 0x00RRGGBB.
+    """'Pack' a `CRGB` or `CHSV` color into a 24-bit RGB integer.
+
+       :param obj val: `CRGB` or `CHSV` color.
+       :returns: 24-bit integer a la ``0x00RRGGBB``.
     """
 
     # Convert CHSV input to CRGB if needed
@@ -226,9 +223,11 @@ def pack(val):
 
 
 def unpack(val):
-    """ 'Unpack' a 24-bit color into a CRGB instance.
-    ACCEPTS: 24-bit integer a la 0x00RRGGBB.
-    RETURNS: CRGB color.
+    """'Unpack' a 24-bit color into a `CRGB` instance.
+
+       :param int val:  24-bit integer a la ``0x00RRGGBB``.
+       :returns: CRGB color.
+       :rtype: CRGB
     """
 
     # See notes in normalize() for math explanation.  Large constants here
@@ -240,10 +239,10 @@ def unpack(val):
 
 
 def mix(color1, color2, weight2=0.5):
-    """ Blend between two colors using given ratio.
-    ACCEPTS: two colors (each may be CRGB, CHSV or packed integer),
-             and weighting (0.0 to 1.0) of second color.
-    RETURNS: CRGB color in most cases, CHSV if both inputs are CHSV.
+    """Blend between two colors using given ratio. Accepts two colors (each may be `CRGB`,
+       `CHSV` or packed integer), and weighting (0.0 to 1.0) of second color.
+
+       :returns: `CRGB` color in most cases, `CHSV` if both inputs are `CHSV`.
     """
 
     clamp(weight2, 0.0, 1.0)
@@ -287,32 +286,29 @@ def mix(color1, color2, weight2=0.5):
 GFACTOR = 2.5  # Default gamma-correction factor for function below
 
 def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
-    """ Provides gamma adjustment for single values, CRGB and CHSV types
-        and lists of any of these.
+    """Provides gamma adjustment for single values, `CRGB` and `CHSV` types
+       and lists of any of these.
 
-    ACCEPTS: One of three ways:
-      1. A single normalized level (0.0 to 1.0) and optional gamma-adjustment
-         factor (float usu. > 1.0, default if unspecified is GFACTOR) and
-         brightness (float 0.0 to 1.0, default is 1.0).
-      2. A single CRGB or CHSV type, optional single gamma factor OR a
-         (R,G,B) gamma tuple (3 values usu. > 1.0), optional single
-         brightness factor OR a (R,G,B) brightness tuple.  The input tuples
-         are RGB even when a CHSV color is passed.
-      3. A list or tuple of normalized levels, CRGB or CHSV types (and
-         optional gamma and brightness levels or tuples applied to all).
+       Works in one of three ways:
+         1. Accepts a single normalized level (0.0 to 1.0) and optional gamma-adjustment
+            factor (float usu. > 1.0, default if unspecified is GFACTOR) and
+            brightness (float 0.0 to 1.0, default is 1.0). Returns a single normalized gamma-corrected brightness level (0.0 to 1.0).
+         2. Accepts a single `CRGB` or `CHSV` type, optional single gamma factor OR a
+            (R,G,B) gamma tuple (3 values usu. > 1.0), optional single
+            brightness factor OR a (R,G,B) brightness tuple.  The input tuples
+            are RGB even when a `CHSV` color is passed. Returns a normalized
+            gamma-corrected `CRGB` type (NOT `CHSV`!).
+         3. Accept a list or tuple of normalized levels, `CRGB` or `CHSV` types (and
+            optional gamma and brightness levels or tuples applied to all). Returns a list
+            of gamma-corrected values or `CRGB` types (NOT `CHSV`!).
 
-      In cases 2 and 3, if the input is a list (NOT a tuple!), the 'inplace'
-      flag determines whether a new tuple/list is calculated and returned,
-      or the existing value is modified in-place.  By default this is 'False'.
-      If you try to inplace-modify a tuple, there will be...trouble.
+       In cases 2 and 3, if the input is a list (NOT a tuple!), the 'inplace'
+       flag determines whether a new tuple/list is calculated and returned,
+       or the existing value is modified in-place.  By default this is 'False'.
+       If you try to inplace-modify a tuple, an exception is raised.
 
-    RETURNS: Corresponding to above cases:
-      1. Single normalized gamma-corrected brightness level (0.0 to 1.0).
-      2. A normalized gamma-corrected CRGB type (NOT CHSV!).
-      3. A list of gamma-corrected values or CRGB types (NOT CHSV!).
-
-      In cases 2 and 3, there is NO return value if 'inplace' is True --
-      the original values are modified.
+       In cases 2 and 3, there is NO return value if 'inplace' is True --
+       the original values are modified.
     """
 
     if isinstance(val, float):
@@ -390,38 +386,42 @@ def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
                 pow(val.blue, gamma_blue) * brightness_blue)
 
 
-def palette_lookup(pal, pos):
-    """ Fetch color from color palette, with interpolation.
-    ACCEPTS: color palette (list of CRGB, CHSV and/or packed integers),
-             palette position (0.0 to 1.0, wraps around).
-    RETURNS: CRGB or CHSV instance, no gamma correction applied.
+def palette_lookup(palette, position):
+    """Fetch color from color palette, with interpolation.
+
+    :param palette: color palette (list of CRGB, CHSV and/or packed integers)
+    :param float position: palette position (0.0 to 1.0, wraps around).
+
+    :returns: `CRGB` or `CHSV` instance, no gamma correction applied.
     """
 
-    pos %= 1.0  # Wrap palette position in 0.0 to <1.0 range
+    position %= 1.0  # Wrap palette position in 0.0 to <1.0 range
 
-    weight2 = pos * len(pal)    # Scale position to palette length
+    weight2 = position * len(palette)    # Scale position to palette length
     idx = int(floor(weight2))   # Index of 'lower' color (0 to len-1)
     weight2 -= idx              # Weighting of 'upper' color
 
-    color1 = pal[idx]           # Fetch 'lower' color
-    idx = (idx + 1) % len(pal)  # Get index of 'upper' color
-    color2 = pal[idx]           # Fetch 'upper' color
+    color1 = palette[idx]           # Fetch 'lower' color
+    idx = (idx + 1) % len(palette)  # Get index of 'upper' color
+    color2 = palette[idx]           # Fetch 'upper' color
 
     return mix(color1, color2, weight2)
 
 
-def expand_gradient(grad, length):
-    """ Convert gradient palette into standard equal-interval palette.
-    ACCEPTS: List or tuple of of 2-element lists/tuples containing position
-             (0.0 to 1.0) and color (packed int, CRGB or CHSV).  It's OK if
-             the list/tuple elements are either lists OR tuples, but don't
-             mix and match lists and tuples -- use all one or the other.
-    RETURNS: CRGB list, can be used with palette_lookup() function.
+def expand_gradient(gradient, length):
+    """Convert gradient palette into standard equal-interval palette.
+
+    :param sequence gradient: List or tuple of of 2-element lists/tuples containing
+      position (0.0 to 1.0) and color (packed int, CRGB or CHSV).  It's OK if the
+      list/tuple elements are either lists OR tuples, but don't mix and match lists and
+      tuples -- use all one or the other.
+
+    :returns: CRGB list, can be used with palette_lookup() function.
     """
 
-    grad = sorted(grad) # Sort list by position values
-    least = grad[0][0]  # Lowest position value (ostensibly 0.0)
-    most = grad[-1][0]  # Highest position value (ostensibly 1.0)
+    gradient = sorted(gradient) # Sort list by position values
+    least = gradient[0][0]  # Lowest position value (ostensibly 0.0)
+    most = gradient[-1][0]  # Highest position value (ostensibly 1.0)
     newlist = []
 
     for i in range(length):
@@ -436,20 +436,20 @@ def expand_gradient(grad, length):
         else:
             # Seek position between two items in list
             below, above = 0, -1
-            for n, x in enumerate(grad):
+            for n, x in enumerate(gradient):
                 if pos >= x[0]:
                     below = n
-            for n, x in enumerate(grad[-1:0:-1]):
+            for n, x in enumerate(gradient[-1:0:-1]):
                 if pos <= x[0]:
                     above = -1 - n
 
-        r = grad[above][0] - grad[below][0]  # Range between below, above
+        r = gradient[above][0] - gradient[below][0]  # Range between below, above
         if r <= 0:
-            newlist.append(grad[below][1]) # Use 'below' color only
+            newlist.append(gradient[below][1]) # Use 'below' color only
         else:
-            weight2 = (pos - grad[below][0]) / r  # Weight of 'above' color
-            color1 = grad[below][1]
-            color2 = grad[above][1]
+            weight2 = (pos - gradient[below][0]) / r  # Weight of 'above' color
+            color1 = gradient[below][1]
+            color2 = gradient[above][1]
             # Interpolate and add to list
             newlist.append(mix(color1, color2, weight2))
 
