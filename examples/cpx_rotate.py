@@ -10,9 +10,9 @@ cpx.pixels.brightness = 1.0    # We'll use FancyLED's brightness controls
 # Declare a 4-element color palette, this one happens to be a
 # 'blackbody' palette -- good for heat maps and firey effects.
 palette = [fancy.CRGB(1.0, 1.0, 1.0), # White
-           fancy.CRGB(1.0, 1.0, 0),   # Yellow
-           fancy.CRGB(1.0, 0, 0),     # Red
-           fancy.CRGB(0,0,0)]         # Black
+           fancy.CRGB(1.0, 1.0, 0.0), # Yellow
+           fancy.CRGB(1.0, 0.0, 0.0), # Red
+           fancy.CRGB(0.0, 0.0, 0.0)] # Black
 
 offset = 0  # Positional offset into color palette to get it to 'spin'
 levels = (0.25, 0.3, 0.15)  # Color balance / brightness for gamma function
