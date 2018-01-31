@@ -26,6 +26,6 @@ install:
   - pip install pylint circuitpython-build-tools
 
 script:
-  - pylint adafruit_fancyled/*.py
+  - pylint adafruit_fancyled/*.py --disable=too-many-branches
   - ([[ ! -d "examples" ]] || pylint --disable=missing-docstring,invalid-name examples/*.py)
   - circuitpython-build-bundles --filename_prefix adafruit-circuitpython-fancyled --library_location .
