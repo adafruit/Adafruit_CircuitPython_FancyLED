@@ -33,17 +33,14 @@ TODO(description)
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 
-import adafruit_fancyled as fancy
 from math import floor
+import adafruit_fancyled as fancy
 
+# These are helper functions that provide more FastLED-like calls for
+# fancyled functions.
 # Function names are kept the same as FastLED, which normally upsets pylint.
 # Disable name-checking so this passes muster.
 # pylint: disable=invalid-name
-
-"""
-These are helper functions that provide more FastLED-like calls for
-fancyled functions.
-"""
 
 GFACTOR = 2.5  # Default gamma-correction factor for function below
 
@@ -74,7 +71,7 @@ def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
     # If single gamma value is passed, keep that, otherwise convert
     # gamma values to tuple for gamma_adjust function.
     if g_g is not None and g_b is not None:
-       g_r = (g_r, g_g, g_b)
+        g_r = (g_r, g_g, g_b)
 
     return fancy.gamma_adjust(n, g_r, inplace=inplace)
 
