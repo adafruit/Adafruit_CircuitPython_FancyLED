@@ -3,7 +3,7 @@
 
 import board
 import neopixel
-import adafruit_fancyled as fancy
+import adafruit_fancyled.adafruit_fancyled as fancy
 
 num_leds = 20
 

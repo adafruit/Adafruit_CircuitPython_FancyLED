@@ -2,7 +2,7 @@
 """
 
 from adafruit_circuitplayground.express import cpx
-import adafruit_fancyled as fancy
+import adafruit_fancyled.adafruit_fancyled as fancy
 
 cpx.pixels.auto_write = False  # Refresh pixels only when we say
 cpx.pixels.brightness = 1.0    # We'll use FancyLED's brightness controls
