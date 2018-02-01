@@ -61,6 +61,7 @@ class CRGB(object):
     """
 
     def __init__(self, red, green=0.0, blue=0.0):
+        # pylint: disable=too-many-branches
         if isinstance(red, CHSV):
             # If first/only argument is a CHSV type, perform HSV to RGB
             # conversion.
@@ -90,6 +91,7 @@ class CRGB(object):
             self.blue = ((b * hsv.saturation) + invsat) * hsv.value
         else:
             # Red, green, blue arguments (normalized floats OR integers)
+            # TODO(tannewt): Factor this out into a helper function
             if isinstance(red, float):
                 self.red = clamp(red, 0.0, 1.0)
             else:
@@ -323,6 +325,7 @@ def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
        In cases 2 and 3, there is NO return value if 'inplace' is True --
        the original values are modified.
     """
+    # pylint: disable=too-many-branches
 
     if isinstance(val, float):
         # Input value appears to be a single float

@@ -2,7 +2,7 @@
 """
 
 from adafruit_circuitplayground.express import cpx
-import fastled_helpers as helper
+import adafruit_fancyled.fastled_helpers as helper
 
 cpx.pixels.auto_write = False  # Refresh pixels only when we say
 
