@@ -20,10 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 """
-`adafruit_fancyled`
+`adafruit_fancyled.fastled_helpers`
 ====================================================
 
-TODO(description)
+CircuitPython "helper" library based on the Arduino FastLED library.
+Uses similar function names to assist with porting of existing Arduino FastLED
+projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
@@ -54,6 +56,7 @@ def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
       2. A single CRGB, CHSV or packed integer type and optional gamma
          factor or separate R, G, B gamma values.
       3. A list of CRGB, CHSV or packed integer types (and optional gamma(s)).
+
       In the tuple/list cases, the 'inplace' flag determines whether
       a new tuple/list is calculated and returned, or the existing
       value is modified in-place.  By default this is 'False'.
@@ -64,6 +67,7 @@ def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
       1. Single gamma-corrected brightness level (0-255).
       2. A gamma-corrected CRGB value (even if input is CHSV or packed).
       3. A list of gamma-corrected CRGB values.
+
       In the tuple/list cases, there is NO return value if 'inplace'
       is true -- the original values are modified.
     """
@@ -95,6 +99,7 @@ def loadDynamicGradientPalette(src, size):
              within the overall resulting palette (whatever its size), and
              3 values for R, G and B...and a length for a new palette list
              to be allocated.
+
     RETURNS: list of CRGB colors.
     """
 
@@ -117,6 +122,7 @@ def ColorFromPalette(pal, pos, brightness=255, blend=False):
              e.g. pass 32 to retrieve palette index 2, or 40 for an
              interpolated value between palette index 2 and 3, optional
              brightness (0-255), optional blend flag (True/False)
+
     RETURNS: CRGB color, no gamma correction
     """
 

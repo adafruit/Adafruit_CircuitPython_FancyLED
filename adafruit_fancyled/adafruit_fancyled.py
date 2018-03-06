@@ -20,10 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 """
-`adafruit_fancyled`
+`adafruit_fancyled.adafruit_fancyled`
 ====================================================
 
-TODO(description)
+FancyLED is a CircuitPython library to assist in creating buttery smooth LED animation.
+It's loosely inspired by the FastLED library for Arduino, and in fact we have a "helper"
+library using similar function names to assist with porting of existing Arduino FastLED
+projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
