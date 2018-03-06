@@ -56,6 +56,7 @@ def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
       2. A single CRGB, CHSV or packed integer type and optional gamma
          factor or separate R, G, B gamma values.
       3. A list of CRGB, CHSV or packed integer types (and optional gamma(s)).
+
       In the tuple/list cases, the 'inplace' flag determines whether
       a new tuple/list is calculated and returned, or the existing
       value is modified in-place.  By default this is 'False'.
@@ -66,6 +67,7 @@ def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
       1. Single gamma-corrected brightness level (0-255).
       2. A gamma-corrected CRGB value (even if input is CHSV or packed).
       3. A list of gamma-corrected CRGB values.
+
       In the tuple/list cases, there is NO return value if 'inplace'
       is true -- the original values are modified.
     """
