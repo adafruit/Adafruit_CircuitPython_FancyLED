@@ -20,10 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 """
-`adafruit_fancyled`
+`adafruit_fancyled.fastled_helpers`
 ====================================================
 
-TODO(description)
+CircuitPython “helper” library based on the Arduino FastLED library.
+Uses similar function names to assist with porting of existing Arduino FastLED
+projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
