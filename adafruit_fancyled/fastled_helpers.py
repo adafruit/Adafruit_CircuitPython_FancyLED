@@ -97,6 +97,7 @@ def loadDynamicGradientPalette(src, size):
              within the overall resulting palette (whatever its size), and
              3 values for R, G and B...and a length for a new palette list
              to be allocated.
+
     RETURNS: list of CRGB colors.
     """
 
@@ -119,6 +120,7 @@ def ColorFromPalette(pal, pos, brightness=255, blend=False):
              e.g. pass 32 to retrieve palette index 2, or 40 for an
              interpolated value between palette index 2 and 3, optional
              brightness (0-255), optional blend flag (True/False)
+
     RETURNS: CRGB color, no gamma correction
     """
 
