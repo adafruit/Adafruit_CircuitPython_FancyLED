@@ -24,7 +24,7 @@
 ====================================================
 
 FancyLED is a CircuitPython library to assist in creating buttery smooth LED animation.
-It’s loosely inspired by the FastLED library for Arduino, and in fact we have a "helper"
+It's loosely inspired by the FastLED library for Arduino, and in fact we have a "helper"
 library using similar function names to assist with porting of existing Arduino FastLED
 projects to CircuitPython.
 
