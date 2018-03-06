@@ -23,7 +23,7 @@
 `adafruit_fancyled.fastled_helpers`
 ====================================================
 
-CircuitPython “helper” library based on the Arduino FastLED library.
+CircuitPython "helper" library based on the Arduino FastLED library.
 Uses similar function names to assist with porting of existing Arduino FastLED
 projects to CircuitPython.
 
