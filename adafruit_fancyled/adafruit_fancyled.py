@@ -120,11 +120,11 @@ class CRGB(object):
 
     def __getitem__(self, key):
         """Retrieve red, green or blue value as iterable."""
-        if key is 0:
+        if key == 0:
             return self.red
-        elif key is 1:
+        elif key == 1:
             return self.green
-        elif key is 2:
+        elif key == 2:
             return self.blue
         else:
             raise IndexError
@@ -185,11 +185,11 @@ class CHSV(object):
 
     def __getitem__(self, key):
         """Retrieve hue, saturation or value as iterable."""
-        if key is 0:
+        if key == 0:
             return self.hue
-        elif key is 1:
+        elif key == 1:
             return self.saturation
-        elif key is 2:
+        elif key == 2:
             return self.value
         else:
             raise IndexError
