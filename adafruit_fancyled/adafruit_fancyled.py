@@ -114,6 +114,21 @@ class CRGB(object):
     def __str__(self):
         return "(%s, %s, %s)" % (self.red, self.green, self.blue)
 
+    def __len__(self):
+        """Retrieve total number of color-parts available."""
+        return 3
+
+    def __getitem__(self, key):
+        """Retrieve red, green or blue value as iterable."""
+        if key == 0:
+            return self.red
+        elif key == 1:
+            return self.green
+        elif key == 2:
+            return self.blue
+        else:
+            raise IndexError
+
     def pack(self):
         """'Pack' a `CRGB` color into a 24-bit RGB integer.
 
@@ -163,6 +178,21 @@ class CHSV(object):
 
     def __str__(self):
         return "(%s, %s, %s)" % (self.hue, self.saturation, self.value)
+
+    def __len__(self):
+        """Retrieve total number of 'color-parts' available."""
+        return 3
+
+    def __getitem__(self, key):
+        """Retrieve hue, saturation or value as iterable."""
+        if key == 0:
+            return self.hue
+        elif key == 1:
+            return self.saturation
+        elif key == 2:
+            return self.value
+        else:
+            raise IndexError
 
     def pack(self):
         """'Pack' a `CHSV` color into a 24-bit RGB integer.
