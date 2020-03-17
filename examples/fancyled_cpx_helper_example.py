@@ -10,26 +10,13 @@ cpx.pixels.auto_write = False  # Refresh pixels only when we say
 # non-equal spacing between elements.  This one's a blackbody palette with a
 # longer red 'tail'.  The helper functions let us declare this as a list of
 # bytes, so they're easier to copy over from existing FastLED projects.
-heatmap_gp = bytes(
-    [
-        0,
-        255,
-        255,
-        255,  # White
-        64,
-        255,
-        255,
-        0,  # Yellow
-        128,
-        255,
-        0,
-        0,  # Red
-        255,
-        0,
-        0,
-        0,
-    ]
-)  # Black
+# fmt: off
+heatmap_gp = bytes([
+    0, 255, 255, 255,  # White
+    64, 255, 255, 0,  # Yellow
+    128, 255, 0, 0,  # Red
+    255, 0, 0, 0])  # Black
+# fmt: on
 
 # Convert the gradient palette into a normal palette w/16 elements:
 palette = helper.loadDynamicGradientPalette(heatmap_gp, 16)
