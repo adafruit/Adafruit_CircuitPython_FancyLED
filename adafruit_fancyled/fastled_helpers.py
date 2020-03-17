@@ -46,6 +46,7 @@ from adafruit_fancyled import adafruit_fancyled as fancy
 
 GFACTOR = 2.5  # Default gamma-correction factor for function below
 
+
 def applyGamma_video(n, g_r=GFACTOR, g_g=None, g_b=None, inplace=False):
     """ Approximates various invocations of FastLED's many-ways-overloaded
     applyGamma_video() function.
@@ -108,7 +109,7 @@ def loadDynamicGradientPalette(src, size):
     # (This is what FancyLED's expand_gradient needs for input.)
     grad = []
     for i in range(0, len(src), 4):
-        grad.append((src[i] / 255.0, fancy.CRGB(src[i+1], src[i+2], src[i+3])))
+        grad.append((src[i] / 255.0, fancy.CRGB(src[i + 1], src[i + 2], src[i + 3])))
 
     # Create palette (CRGB list) matching 'size' length
     return fancy.expand_gradient(grad, size)
@@ -160,5 +161,6 @@ def hsv2rgb_spectrum(hue, sat, val):
     """
 
     return fancy.CRGB(fancy.CHSV(hue / 255, sat / 255, val / 255))
+
 
 # pylint: enable=invalid-name
