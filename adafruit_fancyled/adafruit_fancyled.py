@@ -108,7 +108,7 @@ class CRGB:
             else:
                 self.blue = normalize(blue)
 
-    def __repr__(self): # pylint: disable=invalid-repr-returned
+    def __repr__(self):  # pylint: disable=invalid-repr-returned
         return (self.red, self.green, self.blue)
 
     def __str__(self):
@@ -174,7 +174,7 @@ class CHSV:
         else:
             self.value = normalize(v)
 
-    def __repr__(self): # pylint: disable=invalid-repr-returned
+    def __repr__(self):  # pylint: disable=invalid-repr-returned
         return (self.hue, self.saturation, self.value)
 
     def __str__(self):
