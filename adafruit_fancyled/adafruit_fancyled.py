@@ -1,24 +1,7 @@
-# The MIT License (MIT)
+# SPDX-FileCopyrightText: 2017 PaintYourDragon for Adafruit Industries
 #
-# Copyright (c) 2017 PaintYourDragon for Adafruit Industries
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+# SPDX-License-Identifier: MIT
+
 """
 `adafruit_fancyled.adafruit_fancyled`
 ====================================================
@@ -48,19 +31,19 @@ from math import floor
 class CRGB:
     """Color stored in Red, Green, Blue color space.
 
-       One of two ways: separate red, gren, blue values (either as integers
-       (0 to 255 range) or floats (0.0 to 1.0 range), either type is
-       'clamped' to valid range and stored internally in the normalized
-       (float) format), OR can accept a CHSV color as input, which will be
-       converted and stored in RGB format.
+    One of two ways: separate red, gren, blue values (either as integers
+    (0 to 255 range) or floats (0.0 to 1.0 range), either type is
+    'clamped' to valid range and stored internally in the normalized
+    (float) format), OR can accept a CHSV color as input, which will be
+    converted and stored in RGB format.
 
-       Following statements are equivalent - all return red:
+    Following statements are equivalent - all return red:
 
-       .. code-block:: python
+    .. code-block:: python
 
-             c = CRGB(255, 0, 0)
-             c = CRGB(1.0, 0.0, 0.0)
-             c = CRGB(CHSV(0.0, 1.0, 1.0))
+          c = CRGB(255, 0, 0)
+          c = CRGB(1.0, 0.0, 0.0)
+          c = CRGB(CHSV(0.0, 1.0, 1.0))
     """
 
     def __init__(self, red, green=0.0, blue=0.0):
@@ -131,7 +114,7 @@ class CRGB:
     def pack(self):
         """'Pack' a `CRGB` color into a 24-bit RGB integer.
 
-           :returns: 24-bit integer a la ``0x00RRGGBB``.
+        :returns: 24-bit integer a la ``0x00RRGGBB``.
         """
 
         return (
@@ -144,21 +127,21 @@ class CRGB:
 class CHSV:
     """Color stored in Hue, Saturation, Value color space.
 
-       Accepts hue as float (any range) or integer (0-256 -> 0.0-1.0) with
-       no clamping performed (hue can 'wrap around'), saturation and value
-       as float (0.0 to 1.0) or integer (0 to 255), both are clamped and
-       stored internally in the normalized (float) format.  Latter two are
-       optional, can pass juse hue and saturation/value will default to 1.0.
+    Accepts hue as float (any range) or integer (0-256 -> 0.0-1.0) with
+    no clamping performed (hue can 'wrap around'), saturation and value
+    as float (0.0 to 1.0) or integer (0 to 255), both are clamped and
+    stored internally in the normalized (float) format.  Latter two are
+    optional, can pass juse hue and saturation/value will default to 1.0.
 
-       Unlike `CRGB` (which can take a `CHSV` as input), there's currently
-       no equivalent RGB-to-HSV conversion, mostly because it's a bit like
-       trying to reverse a hash...there may be multiple HSV solutions for a
-       given RGB input.
+    Unlike `CRGB` (which can take a `CHSV` as input), there's currently
+    no equivalent RGB-to-HSV conversion, mostly because it's a bit like
+    trying to reverse a hash...there may be multiple HSV solutions for a
+    given RGB input.
 
-       This might be OK as long as conversion precedence is documented,
-       but otherwise (and maybe still) could cause confusion as certain
-       HSV->RGB->HSV translations won't have the same input and output.
-        """
+    This might be OK as long as conversion precedence is documented,
+    but otherwise (and maybe still) could cause confusion as certain
+    HSV->RGB->HSV translations won't have the same input and output.
+    """
 
     def __init__(self, h, s=1.0, v=1.0):
         if isinstance(h, float):
@@ -197,7 +180,7 @@ class CHSV:
     def pack(self):
         """'Pack' a `CHSV` color into a 24-bit RGB integer.
 
-           :returns: 24-bit integer a la ``0x00RRGGBB``.
+        :returns: 24-bit integer a la ``0x00RRGGBB``.
         """
 
         # Convert CHSV to CRGB, return packed result
@@ -205,20 +188,19 @@ class CHSV:
 
 
 def clamp(val, lower, upper):
-    """Constrain value within a numeric range (inclusive).
-    """
+    """Constrain value within a numeric range (inclusive)."""
     return max(lower, min(val, upper))
 
 
 def normalize(val, inplace=False):
     """Convert 8-bit (0 to 255) value to normalized (0.0 to 1.0) value.
 
-       Accepts integer, 0 to 255 range (input is clamped) or a list or tuple
-       of integers.  In list case, 'inplace' can be used to control whether
-       the original list is modified (True) or a new list is generated and
-       returned (False).
+    Accepts integer, 0 to 255 range (input is clamped) or a list or tuple
+    of integers.  In list case, 'inplace' can be used to control whether
+    the original list is modified (True) or a new list is generated and
+    returned (False).
 
-       Returns float, 0.0 to 1.0 range, or list of floats (or None if inplace).
+    Returns float, 0.0 to 1.0 range, or list of floats (or None if inplace).
     """
 
     if isinstance(val, int):
@@ -239,12 +221,12 @@ def normalize(val, inplace=False):
 def denormalize(val, inplace=False):
     """Convert normalized (0.0 to 1.0) value to 8-bit (0 to 255) value
 
-       Accepts float, 0.0 to 1.0 range or a list or tuple of floats.  In
-       list case, 'inplace' can be used to control whether the original list
-       is modified (True) or a new list is generated and returned (False).
+    Accepts float, 0.0 to 1.0 range or a list or tuple of floats.  In
+    list case, 'inplace' can be used to control whether the original list
+    is modified (True) or a new list is generated and returned (False).
 
-       Returns integer, 0 to 255 range, or list of integers (or None if
-       inplace).
+    Returns integer, 0 to 255 range, or list of integers (or None if
+    inplace).
     """
 
     # 'Denormalizing' math varies slightly from normalize().  This is on
@@ -269,9 +251,9 @@ def denormalize(val, inplace=False):
 def unpack(val):
     """'Unpack' a 24-bit color into a `CRGB` instance.
 
-       :param int val:  24-bit integer a la ``0x00RRGGBB``.
-       :returns: CRGB color.
-       :rtype: CRGB
+    :param int val:  24-bit integer a la ``0x00RRGGBB``.
+    :returns: CRGB color.
+    :rtype: CRGB
     """
 
     # See notes in normalize() for math explanation.  Large constants here
@@ -286,10 +268,10 @@ def unpack(val):
 
 def mix(color1, color2, weight2=0.5):
     """Blend between two colors using given ratio. Accepts two colors (each
-       may be `CRGB`, `CHSV` or packed integer), and weighting (0.0 to 1.0)
-       of second color.
+    may be `CRGB`, `CHSV` or packed integer), and weighting (0.0 to 1.0)
+    of second color.
 
-       :returns: `CRGB` color in most cases, `CHSV` if both inputs are `CHSV`.
+    :returns: `CRGB` color in most cases, `CHSV` if both inputs are `CHSV`.
     """
 
     clamp(weight2, 0.0, 1.0)
@@ -337,31 +319,31 @@ GFACTOR = 2.7  # Default gamma-correction factor for function below
 
 def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
     """Provides gamma adjustment for single values, `CRGB` and `CHSV` types
-       and lists of any of these.
+    and lists of any of these.
 
-       Works in one of three ways:
-         1. Accepts a single normalized level (0.0 to 1.0) and optional
-            gamma-adjustment factor (float usu. > 1.0, default if
-            unspecified is GFACTOR) and brightness (float 0.0 to 1.0,
-            default is 1.0). Returns a single normalized gamma-corrected
-            brightness level (0.0 to 1.0).
-         2. Accepts a single `CRGB` or `CHSV` type, optional single gamma
-            factor OR a (R,G,B) gamma tuple (3 values usu. > 1.0), optional
-            single brightness factor OR a (R,G,B) brightness tuple.  The
-            input tuples are RGB even when a `CHSV` color is passed. Returns
-            a normalized gamma-corrected `CRGB` type (NOT `CHSV`!).
-         3. Accept a list or tuple of normalized levels, `CRGB` or `CHSV`
-            types (and optional gamma and brightness levels or tuples
-            applied to all). Returns a list of gamma-corrected values or
-            `CRGB` types (NOT `CHSV`!).
+    Works in one of three ways:
+      1. Accepts a single normalized level (0.0 to 1.0) and optional
+         gamma-adjustment factor (float usu. > 1.0, default if
+         unspecified is GFACTOR) and brightness (float 0.0 to 1.0,
+         default is 1.0). Returns a single normalized gamma-corrected
+         brightness level (0.0 to 1.0).
+      2. Accepts a single `CRGB` or `CHSV` type, optional single gamma
+         factor OR a (R,G,B) gamma tuple (3 values usu. > 1.0), optional
+         single brightness factor OR a (R,G,B) brightness tuple.  The
+         input tuples are RGB even when a `CHSV` color is passed. Returns
+         a normalized gamma-corrected `CRGB` type (NOT `CHSV`!).
+      3. Accept a list or tuple of normalized levels, `CRGB` or `CHSV`
+         types (and optional gamma and brightness levels or tuples
+         applied to all). Returns a list of gamma-corrected values or
+         `CRGB` types (NOT `CHSV`!).
 
-       In cases 2 and 3, if the input is a list (NOT a tuple!), the 'inplace'
-       flag determines whether a new tuple/list is calculated and returned,
-       or the existing value is modified in-place.  By default this is
-       'False'.  If you try to inplace-modify a tuple, an exception is raised.
+    In cases 2 and 3, if the input is a list (NOT a tuple!), the 'inplace'
+    flag determines whether a new tuple/list is calculated and returned,
+    or the existing value is modified in-place.  By default this is
+    'False'.  If you try to inplace-modify a tuple, an exception is raised.
 
-       In cases 2 and 3, there is NO return value if 'inplace' is True --
-       the original values are modified.
+    In cases 2 and 3, there is NO return value if 'inplace' is True --
+    the original values are modified.
     """
     # pylint: disable=too-many-branches
 
