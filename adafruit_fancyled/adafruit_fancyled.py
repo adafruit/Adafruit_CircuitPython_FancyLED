@@ -77,19 +77,9 @@ class CRGB:
             self.blue = ((b * hsv.saturation) + invsat) * hsv.value
         else:
             # Red, green, blue arguments (normalized floats OR integers)
-            # TODO(tannewt): Factor this out into a helper function
-            if isinstance(red, float):
-                self.red = clamp(red, 0.0, 1.0)
-            else:
-                self.red = normalize(red)
-            if isinstance(green, float):
-                self.green = clamp(green, 0.0, 1.0)
-            else:
-                self.green = normalize(green)
-            if isinstance(blue, float):
-                self.blue = clamp(blue, 0.0, 1.0)
-            else:
-                self.blue = normalize(blue)
+            self.red = clamp_norm(red)
+            self.green = clamp_norm(green)
+            self.blue = clamp_norm(blue)
 
     def __repr__(self):  # pylint: disable=invalid-repr-returned
         return (self.red, self.green, self.blue)
@@ -111,12 +101,59 @@ class CRGB:
             return self.blue
         raise IndexError
 
-    def pack(self):
-        """'Pack' a `CRGB` color into a 24-bit RGB integer.
-
-        :returns: 24-bit integer a la ``0x00RRGGBB``.
+    def pack(self, white=None):
+        """'Pack' a `CRGB` color into a 24-bit RGB integer, OR, optionally
+        assign a white element for RGBW NeoPixels and return as a 4-tuple,
+        either of which can be passed to the NeoPixel setter.
+        WITH REGARD TO RGBW PIXELS, THIS PROBABLY DOESN'T DO WHAT YOU THINK.
+        FancyLED is currently RGB-focused through and through and has no
+        concept of RGBW. This function does NOT perform white component
+        replacement on the RGB elements -- those values are returned
+        unmodified, this just allows appending a white element to pass
+        through to the NeoPixel setter with RGBW pixels.
+        The reason for this peculiar return option is that the core NeoPixel
+        library can't accept packed 32-bit values for RGBW, only 4-tuples.
+        This is intentional and by design, because space-constrained devices
+        don't support the full 32-bit integer range in CircuitPython (but
+        24-bit RGB fits).
+        Also note, if gamma_adjust() was applied to an RGB color that's then
+        passed to this function, that adjustment is NOT automatically applied
+        to the white element -- this must be explicitly handled in user code
+        (gamma_adjust() can accept both tuples (for RGB) and single values
+        (for white)).
+        :param white: integer 0 to 255, float 0.0 to 1.0, or None (default).
+        If specified, this value is returned as the last element of an
+        integer 4-tuple. Values outside these ranges will be clamped, not
+        throw an exception.
+        :returns: 24-bit integer a la ``0x00RRGGBB`` if no argument passed,
+        or 4-element integer tuple a la ``(R,G,B,W)`` if argument for fourth
+        element is provided.
+        :rtype: integer or 4-tuple.
         """
 
+        if white:
+            # So really this is a quick-fix to the FancyLED + RGBW NeoPixel
+            # combination, which is rare and has only come up once. But if
+            # this were to become a common thing in the future, a generally
+            # more robust approach would be to implement a distinct CRGBW
+            # class, which could then do things like gamma_adjust() on all
+            # elements, perhaps white component replacement, etc., and would
+            # do away with this gross special kludge case.
+            # Initially this was done as an __add__ function before moving
+            # it here into pack(), as the CRGB + value syntax was guaranteed
+            # to cause confusion (it would be easily assumed that it increases
+            # brightness, not appends a value). So, note to future self,
+            # don't try to be clever that way, this was on purpose.
+            if isinstance(white, float):
+                white = denormalize(white)
+            else:
+                white = clamp(white, 0, 255)
+            return (
+                denormalize(self.red),
+                denormalize(self.green),
+                denormalize(self.blue),
+                white,
+            )
         return (
             (denormalize(self.red) << 16)
             | (denormalize(self.green) << 8)
@@ -148,14 +185,8 @@ class CHSV:
             self.hue = h  # Don't clamp! Hue can wrap around forever.
         else:
             self.hue = float(h) / 256.0
-        if isinstance(s, float):
-            self.saturation = clamp(s, 0.0, 1.0)
-        else:
-            self.saturation = normalize(s)
-        if isinstance(v, float):
-            self.value = clamp(v, 0.0, 1.0)
-        else:
-            self.value = normalize(v)
+        self.saturation = clamp_norm(s)
+        self.value = clamp_norm(v)
 
     def __repr__(self):  # pylint: disable=invalid-repr-returned
         return (self.hue, self.saturation, self.value)
@@ -177,14 +208,23 @@ class CHSV:
             return self.value
         raise IndexError
 
-    def pack(self):
-        """'Pack' a `CHSV` color into a 24-bit RGB integer.
-
-        :returns: 24-bit integer a la ``0x00RRGGBB``.
+    def pack(self, white=None):
+        """'Pack' a `CHSV` color into a 24-bit RGB integer, OR, optionally
+        assign a white element for RGBW NeoPixels and return as a 4-tuple,
+        either of which can be passed to the NeoPixel setter.
+        Please see notes accompanying CRGB.pack() for important RGBW
+        peculiarities.
+        :param white: integer 0 to 255, float 0.0 to 1.0, or None (default).
+        If specified, this value is returned as the last element of a 4-tuple.
+        Values outside these ranges will be clamped, not throw an exception.
+        :returns: 24-bit integer a la ``0x00RRGGBB`` if no argument passed,
+        or 4-element integer tuple a la ``(R,G,B,W)`` if argument for fourth
+        element is provided.
+        :rtype: integer or 4-tuple.
         """
 
         # Convert CHSV to CRGB, return packed result
-        return CRGB(self).pack()
+        return CRGB(self).pack(white)
 
 
 def clamp(val, lower, upper):
@@ -216,6 +256,17 @@ def normalize(val, inplace=False):
 
     # Generate new list
     return [normalize(n) for n in val]
+
+
+def clamp_norm(val):
+    """Clamp or normalize a value as appropriate to its type. If a float is
+    received, the return value is the input clamped to a 0.0 to 1.0 range.
+    If an integer is received, a range of 0-255 is scaled to a float value
+    of 0.0 to 1.0 (also clamped).
+    """
+    if isinstance(val, float):
+        return clamp(val, 0.0, 1.0)
+    return normalize(val)
 
 
 def denormalize(val, inplace=False):
