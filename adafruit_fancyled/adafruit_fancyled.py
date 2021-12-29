@@ -154,12 +154,11 @@ class CRGB:
                 denormalize(self.blue),
                 white
             )
-        else:
-            return (
-                (denormalize(self.red) << 16)
-                | (denormalize(self.green) << 8)
-                | (denormalize(self.blue))
-            )
+        return (
+            (denormalize(self.red) << 16)
+            | (denormalize(self.green) << 8)
+            | (denormalize(self.blue))
+        )
 
 
 class CHSV:
