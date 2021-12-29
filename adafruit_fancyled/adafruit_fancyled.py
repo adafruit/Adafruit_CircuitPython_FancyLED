@@ -77,9 +77,9 @@ class CRGB:
             self.blue = ((b * hsv.saturation) + invsat) * hsv.value
         else:
             # Red, green, blue arguments (normalized floats OR integers)
-            self.red = clamp_norm(red);
-            self.green = clamp_norm(green);
-            self.blue = clamp_norm(blue);
+            self.red = clamp_norm(red)
+            self.green = clamp_norm(green)
+            self.blue = clamp_norm(blue)
 
     def __repr__(self):  # pylint: disable=invalid-repr-returned
         return (self.red, self.green, self.blue)
@@ -267,8 +267,7 @@ def clamp_norm(val):
     """
     if isinstance(val, float):
         return clamp(val, 0.0, 1.0)
-    else:
-        return normalize(val)
+    return normalize(val)
 
 
 def denormalize(val, inplace=False):
