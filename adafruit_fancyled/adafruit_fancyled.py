@@ -152,7 +152,7 @@ class CRGB:
                 denormalize(self.red),
                 denormalize(self.green),
                 denormalize(self.blue),
-                white
+                white,
             )
         return (
             (denormalize(self.red) << 16)
