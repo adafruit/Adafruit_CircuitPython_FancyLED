@@ -16,7 +16,7 @@ projects to CircuitPython.
 
 # imports
 
-__version__ = "0.0.0-auto.0"
+__version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 
 from math import floor
