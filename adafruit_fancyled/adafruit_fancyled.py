@@ -180,6 +180,7 @@ class CHSV:
     HSV->RGB->HSV translations won't have the same input and output.
     """
 
+    # pylint: disable=invalid-name
     def __init__(self, h, s=1.0, v=1.0):
         if isinstance(h, float):
             self.hue = h  # Don't clamp! Hue can wrap around forever.
