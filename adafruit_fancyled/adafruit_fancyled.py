@@ -188,7 +188,7 @@ class CHSV:
     """
 
     # pylint: disable=invalid-name
-    def __init__(self, h: float, s: float = 1.0, v: float = 1.0):
+    def __init__(self, h: float, s: float = 1.0, v: float = 1.0) -> None:
         if isinstance(h, float):
             self.hue = h  # Don't clamp! Hue can wrap around forever.
         else:
@@ -283,7 +283,9 @@ def clamp_norm(val: Union[float, int]) -> Union[float, int]:
     return normalize(val)
 
 
-def denormalize(val: Union[float, List[float]], inplace=False) -> Union[int, List[int]]:
+def denormalize(
+    val: Union[float, List[float], Tuple[float]], inplace=False
+) -> Union[int, List[int]]:
     """Convert normalized (0.0 to 1.0) value to 8-bit (0 to 255) value
 
     Accepts float, 0.0 to 1.0 range or a list or tuple of floats.  In
@@ -384,7 +386,9 @@ def mix(
 GFACTOR = 2.7  # Default gamma-correction factor for function below
 
 
-def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
+def gamma_adjust(
+    val: Any, gamma_value: Any = None, brightness: Any = 1.0, inplace=False
+) -> Union[float, CRGB, List[Union[float, CRGB]]]:
     """Provides gamma adjustment for single values, `CRGB` and `CHSV` types
     and lists of any of these.
 
@@ -545,12 +549,11 @@ def palette_lookup(
     return mix(color1, color2, weight2)
 
 
-# gradient: Union[
-#     List[Union[List[Union[float, CRGB, CHSV]], Tuple[Union[float, CRGB, CHSV]]]],
-#     Tuple[Union[List[Union[float, CRGB, CHSV]], Tuple[Union[float, CRGB, CHSV]]]],
-# ],
 def expand_gradient(
-    gradient: Any,
+    gradient: Union[
+        List[List[float, Union[int, CRGB, CHSV]]],
+        Tuple[Tuple[float, Union[int, CRGB, CHSV]]],
+    ],
     length: float,
 ) -> List[CRGB]:
     """Convert gradient palette into standard equal-interval palette.
