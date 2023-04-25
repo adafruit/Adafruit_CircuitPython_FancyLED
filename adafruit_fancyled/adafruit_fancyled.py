@@ -195,9 +195,9 @@ class CHSV:
         self.saturation = clamp_norm(s)
         self.value = clamp_norm(v)
 
-    def __repr__(
+    def __repr__(  # pylint: disable=invalid-repr-returned
         self,
-    ):  # pylint: disable=invalid-repr-returned
+    ) -> Tuple[float, float, float]:
         return (self.hue, self.saturation, self.value)
 
     def __str__(self) -> str:
@@ -341,7 +341,7 @@ def mix(
     """
 
     clamp(weight2, 0.0, 1.0)
-    weight1 = 1.0 - weight2
+    weight1: float = 1.0 - weight2
 
     if isinstance(color1, CHSV):
         if isinstance(color2, CHSV):
