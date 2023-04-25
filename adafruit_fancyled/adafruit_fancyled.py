@@ -13,6 +13,7 @@ projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
+from __future__ import annotations
 
 # imports
 
