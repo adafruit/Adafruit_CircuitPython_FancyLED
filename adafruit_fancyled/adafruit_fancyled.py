@@ -23,7 +23,7 @@ from math import floor
 
 try:
     from typing import Tuple, Union, Optional, List, Any
-    from Adafruit_CircuitPython_Typing import FillBasedColorUnion
+    from circuitpython_typing.led import FillBasedColorUnion
 except ImportError:
     pass
 
