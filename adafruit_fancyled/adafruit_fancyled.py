@@ -13,16 +13,15 @@ projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
-from __future__ import annotations
-
-# imports
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 
+# imports
 from math import floor
 
 try:
+    from __future__ import annotations
     from typing import Tuple, Union, Optional, List, Any
     from circuitpython_typing.led import FillBasedColorUnion
 except ImportError:
@@ -53,16 +52,16 @@ class CRGB:
           c = CRGB(CHSV(0.0, 1.0, 1.0))
     """
 
-    def __init__(self, red: float, green: float = 0.0, blue: float = 0.0) -> None:
+    def __init__(self, red: CHSV, green: float = 0.0, blue: float = 0.0) -> None:
         # pylint: disable=too-many-branches
         if isinstance(red, CHSV):
             # If first/only argument is a CHSV type, perform HSV to RGB
             # conversion.
-            hsv = red  # 'red' is CHSV, this is just more readable
-            hue = hsv.hue * 6.0  # Hue circle = 0.0 to 6.0
-            sxt = floor(hue)  # Sextant index is next-lower integer of hue
-            frac = hue - sxt  # Fraction-within-sextant is 0.0 to <1.0
-            sxt = int(sxt) % 6  # mod6 the sextant so it's always 0 to 5
+            hsv: CHSV = red  # 'red' is CHSV, this is just more readable
+            hue: float = hsv.hue * 6.0  # Hue circle = 0.0 to 6.0
+            sxt: int = floor(hue)  # Sextant index is next-lower integer of hue
+            frac: float = hue - sxt  # Fraction-within-sextant is 0.0 to <1.0
+            sxt: int = int(sxt) % 6  # mod6 the sextant so it's always 0 to 5
 
             if sxt == 0:  # Red to <yellow
                 r, g, b = 1.0, frac, 0.0
@@ -77,7 +76,7 @@ class CRGB:
             else:  # Magenta to <red
                 r, g, b = 1.0, 0.0, 1.0 - frac
 
-            invsat = 1.0 - hsv.saturation  # Inverse-of-saturation
+            invsat: float = 1.0 - hsv.saturation  # Inverse-of-saturation
 
             self.red = ((r * hsv.saturation) + invsat) * hsv.value
             self.green = ((g * hsv.saturation) + invsat) * hsv.value
@@ -190,11 +189,11 @@ class CHSV:
     # pylint: disable=invalid-name
     def __init__(self, h: float, s: float = 1.0, v: float = 1.0) -> None:
         if isinstance(h, float):
-            self.hue = h  # Don't clamp! Hue can wrap around forever.
+            self.hue: float = h  # Don't clamp! Hue can wrap around forever.
         else:
-            self.hue = float(h) / 256.0
-        self.saturation = clamp_norm(s)
-        self.value = clamp_norm(v)
+            self.hue: float = float(h) / 256.0
+        self.saturation: float = clamp_norm(s)
+        self.value: float = clamp_norm(v)
 
     def __repr__(  # pylint: disable=invalid-repr-returned
         self,
@@ -284,7 +283,7 @@ def clamp_norm(val: Union[float, int]) -> Union[float, int]:
 
 
 def denormalize(
-    val: Union[float, List[float], Tuple[float]], inplace=False
+    val: Union[float, List[float], Tuple[float]], inplace: bool = False
 ) -> Union[int, List[int]]:
     """Convert normalized (0.0 to 1.0) value to 8-bit (0 to 255) value
 
@@ -387,7 +386,10 @@ GFACTOR = 2.7  # Default gamma-correction factor for function below
 
 
 def gamma_adjust(
-    val: Any, gamma_value: Any = None, brightness: Any = 1.0, inplace=False
+    val: Any,
+    gamma_value: Any = None,
+    brightness: Optional[Union[float, Tuple[int, int, int]]] = 1.0,
+    inplace: Optional[bool] = False,
 ) -> Union[float, CRGB, List[Union[float, CRGB]]]:
     """Provides gamma adjustment for single values, `CRGB` and `CHSV` types
     and lists of any of these.
