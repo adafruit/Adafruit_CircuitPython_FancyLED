@@ -13,13 +13,19 @@ projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
-
-# imports
+from __future__ import annotations
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 
+# imports
 from math import floor
+
+try:
+    from typing import Tuple, Union, Optional, List, Any
+    from circuitpython_typing.led import FillBasedColorUnion
+except ImportError:
+    pass
 
 
 # FancyLED provides color- and palette-related utilities for LED projects,
@@ -46,16 +52,16 @@ class CRGB:
           c = CRGB(CHSV(0.0, 1.0, 1.0))
     """
 
-    def __init__(self, red, green=0.0, blue=0.0):
+    def __init__(self, red: CHSV, green: float = 0.0, blue: float = 0.0) -> None:
         # pylint: disable=too-many-branches
         if isinstance(red, CHSV):
             # If first/only argument is a CHSV type, perform HSV to RGB
             # conversion.
-            hsv = red  # 'red' is CHSV, this is just more readable
-            hue = hsv.hue * 6.0  # Hue circle = 0.0 to 6.0
-            sxt = floor(hue)  # Sextant index is next-lower integer of hue
-            frac = hue - sxt  # Fraction-within-sextant is 0.0 to <1.0
-            sxt = int(sxt) % 6  # mod6 the sextant so it's always 0 to 5
+            hsv: CHSV = red  # 'red' is CHSV, this is just more readable
+            hue: float = hsv.hue * 6.0  # Hue circle = 0.0 to 6.0
+            sxt: int = floor(hue)  # Sextant index is next-lower integer of hue
+            frac: float = hue - sxt  # Fraction-within-sextant is 0.0 to <1.0
+            sxt: int = int(sxt) % 6  # mod6 the sextant so it's always 0 to 5
 
             if sxt == 0:  # Red to <yellow
                 r, g, b = 1.0, frac, 0.0
@@ -70,7 +76,7 @@ class CRGB:
             else:  # Magenta to <red
                 r, g, b = 1.0, 0.0, 1.0 - frac
 
-            invsat = 1.0 - hsv.saturation  # Inverse-of-saturation
+            invsat: float = 1.0 - hsv.saturation  # Inverse-of-saturation
 
             self.red = ((r * hsv.saturation) + invsat) * hsv.value
             self.green = ((g * hsv.saturation) + invsat) * hsv.value
@@ -81,17 +87,17 @@ class CRGB:
             self.green = clamp_norm(green)
             self.blue = clamp_norm(blue)
 
-    def __repr__(self):  # pylint: disable=invalid-repr-returned
+    def __repr__(self) -> Tuple[int, int, int]:  # pylint: disable=invalid-repr-returned
         return (self.red, self.green, self.blue)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "(%s, %s, %s)" % (self.red, self.green, self.blue)
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Retrieve total number of color-parts available."""
         return 3
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: int) -> float:
         """Retrieve red, green or blue value as iterable."""
         if key == 0:
             return self.red
@@ -101,7 +107,7 @@ class CRGB:
             return self.blue
         raise IndexError
 
-    def pack(self, white=None):
+    def pack(self, white: Optional[float] = None) -> FillBasedColorUnion:
         """'Pack' a `CRGB` color into a 24-bit RGB integer, OR, optionally
         assign a white element for RGBW NeoPixels and return as a 4-tuple,
         either of which can be passed to the NeoPixel setter.
@@ -181,25 +187,27 @@ class CHSV:
     """
 
     # pylint: disable=invalid-name
-    def __init__(self, h, s=1.0, v=1.0):
+    def __init__(self, h: float, s: float = 1.0, v: float = 1.0) -> None:
         if isinstance(h, float):
-            self.hue = h  # Don't clamp! Hue can wrap around forever.
+            self.hue: float = h  # Don't clamp! Hue can wrap around forever.
         else:
-            self.hue = float(h) / 256.0
-        self.saturation = clamp_norm(s)
-        self.value = clamp_norm(v)
+            self.hue: float = float(h) / 256.0
+        self.saturation: float = clamp_norm(s)
+        self.value: float = clamp_norm(v)
 
-    def __repr__(self):  # pylint: disable=invalid-repr-returned
+    def __repr__(  # pylint: disable=invalid-repr-returned
+        self,
+    ) -> Tuple[float, float, float]:
         return (self.hue, self.saturation, self.value)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "(%s, %s, %s)" % (self.hue, self.saturation, self.value)
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Retrieve total number of 'color-parts' available."""
         return 3
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: int) -> float:
         """Retrieve hue, saturation or value as iterable."""
         if key == 0:
             return self.hue
@@ -209,7 +217,7 @@ class CHSV:
             return self.value
         raise IndexError
 
-    def pack(self, white=None):
+    def pack(self, white: Optional[float] = None) -> FillBasedColorUnion:
         """'Pack' a `CHSV` color into a 24-bit RGB integer, OR, optionally
         assign a white element for RGBW NeoPixels and return as a 4-tuple,
         either of which can be passed to the NeoPixel setter.
@@ -228,12 +236,16 @@ class CHSV:
         return CRGB(self).pack(white)
 
 
-def clamp(val, lower, upper):
+def clamp(
+    val: Union[int, float], lower: Union[int, float], upper: Union[int, float]
+) -> Union[int, float]:
     """Constrain value within a numeric range (inclusive)."""
     return max(lower, min(val, upper))
 
 
-def normalize(val, inplace=False):
+def normalize(
+    val: int, inplace: Optional[bool] = False
+) -> Union[None, float, List[float]]:
     """Convert 8-bit (0 to 255) value to normalized (0.0 to 1.0) value.
 
     Accepts integer, 0 to 255 range (input is clamped) or a list or tuple
@@ -259,7 +271,7 @@ def normalize(val, inplace=False):
     return [normalize(n) for n in val]
 
 
-def clamp_norm(val):
+def clamp_norm(val: Union[float, int]) -> Union[float, int]:
     """Clamp or normalize a value as appropriate to its type. If a float is
     received, the return value is the input clamped to a 0.0 to 1.0 range.
     If an integer is received, a range of 0-255 is scaled to a float value
@@ -270,7 +282,9 @@ def clamp_norm(val):
     return normalize(val)
 
 
-def denormalize(val, inplace=False):
+def denormalize(
+    val: Union[float, List[float], Tuple[float]], inplace: bool = False
+) -> Union[int, List[int]]:
     """Convert normalized (0.0 to 1.0) value to 8-bit (0 to 255) value
 
     Accepts float, 0.0 to 1.0 range or a list or tuple of floats.  In
@@ -300,7 +314,7 @@ def denormalize(val, inplace=False):
     return [denormalize(n) for n in val]
 
 
-def unpack(val):
+def unpack(val: int) -> CRGB:
     """'Unpack' a 24-bit color into a `CRGB` instance.
 
     :param int val:  24-bit integer a la ``0x00RRGGBB``.
@@ -318,7 +332,9 @@ def unpack(val):
     )  # Blue
 
 
-def mix(color1, color2, weight2=0.5):
+def mix(
+    color1: Union[CRGB, CHSV], color2: Union[CRGB, CHSV], weight2: float = 0.5
+) -> CRGB:
     """Blend between two colors using given ratio. Accepts two colors (each
     may be `CRGB`, `CHSV` or packed integer), and weighting (0.0 to 1.0)
     of second color.
@@ -327,7 +343,7 @@ def mix(color1, color2, weight2=0.5):
     """
 
     clamp(weight2, 0.0, 1.0)
-    weight1 = 1.0 - weight2
+    weight1: float = 1.0 - weight2
 
     if isinstance(color1, CHSV):
         if isinstance(color2, CHSV):
@@ -369,7 +385,12 @@ def mix(color1, color2, weight2=0.5):
 GFACTOR = 2.7  # Default gamma-correction factor for function below
 
 
-def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
+def gamma_adjust(
+    val: Any,
+    gamma_value: Any = None,
+    brightness: Optional[Union[float, Tuple[int, int, int]]] = 1.0,
+    inplace: Optional[bool] = False,
+) -> Union[float, CRGB, List[Union[float, CRGB]]]:
     """Provides gamma adjustment for single values, `CRGB` and `CHSV` types
     and lists of any of these.
 
@@ -506,7 +527,9 @@ def gamma_adjust(val, gamma_value=None, brightness=1.0, inplace=False):
     )
 
 
-def palette_lookup(palette, position):
+def palette_lookup(
+    palette: Union[List[CRGB], List[CHSV], List[int]], position: float
+) -> Union[CRGB, CHSV]:
     """Fetch color from color palette, with interpolation.
 
     :param palette: color palette (list of CRGB, CHSV and/or packed integers)
@@ -528,7 +551,13 @@ def palette_lookup(palette, position):
     return mix(color1, color2, weight2)
 
 
-def expand_gradient(gradient, length):
+def expand_gradient(
+    gradient: Union[
+        List[List[float, Union[int, CRGB, CHSV]]],
+        Tuple[Tuple[float, Union[int, CRGB, CHSV]]],
+    ],
+    length: float,
+) -> List[CRGB]:
     """Convert gradient palette into standard equal-interval palette.
 
     :param sequence gradient: List or tuple of of 2-element lists/tuples
