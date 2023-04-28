@@ -13,6 +13,7 @@ projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
+from __future__ import annotations
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
@@ -21,7 +22,6 @@ __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 from math import floor
 
 try:
-    from __future__ import annotations
     from typing import Tuple, Union, Optional, List, Any
     from circuitpython_typing.led import FillBasedColorUnion
 except ImportError:
