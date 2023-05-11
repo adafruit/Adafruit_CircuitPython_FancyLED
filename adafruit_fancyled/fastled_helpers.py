@@ -134,7 +134,6 @@ def ColorFromPalette(pal, pos, brightness=255, blend=False):
 
 
 def hsv2rgb_spectrum(hue, sat, val):
-
     """This is named the same thing as FastLED's simpler HSV to RGB function
     (spectrum, vs rainbow) but implementation is a bit different for the
     sake of getting something running (adapted from some NeoPixel code).
