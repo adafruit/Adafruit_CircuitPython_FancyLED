@@ -13,6 +13,7 @@ projects to CircuitPython.
 
 * Author(s): PaintYourDragon
 """
+
 from __future__ import annotations
 
 __version__ = "0.0.0+auto.0"
@@ -22,7 +23,8 @@ __repo__ = "https://github.com/Adafruit/Adafruit_CircuitPython_FancyLED.git"
 from math import floor
 
 try:
-    from typing import Tuple, Union, Optional, List, Any
+    from typing import Any, Optional, Union
+
     from circuitpython_typing.led import FillBasedColorUnion
 except ImportError:
     pass
@@ -53,7 +55,6 @@ class CRGB:
     """
 
     def __init__(self, red: CHSV, green: float = 0.0, blue: float = 0.0) -> None:
-        # pylint: disable=too-many-branches
         if isinstance(red, CHSV):
             # If first/only argument is a CHSV type, perform HSV to RGB
             # conversion.
@@ -87,11 +88,11 @@ class CRGB:
             self.green = clamp_norm(green)
             self.blue = clamp_norm(blue)
 
-    def __repr__(self) -> Tuple[int, int, int]:  # pylint: disable=invalid-repr-returned
+    def __repr__(self) -> tuple[int, int, int]:
         return (self.red, self.green, self.blue)
 
     def __str__(self) -> str:
-        return "(%s, %s, %s)" % (self.red, self.green, self.blue)
+        return f"({self.red}, {self.green}, {self.blue})"
 
     def __len__(self) -> int:
         """Retrieve total number of color-parts available."""
@@ -186,7 +187,6 @@ class CHSV:
     HSV->RGB->HSV translations won't have the same input and output.
     """
 
-    # pylint: disable=invalid-name
     def __init__(self, h: float, s: float = 1.0, v: float = 1.0) -> None:
         if isinstance(h, float):
             self.hue: float = h  # Don't clamp! Hue can wrap around forever.
@@ -195,13 +195,13 @@ class CHSV:
         self.saturation: float = clamp_norm(s)
         self.value: float = clamp_norm(v)
 
-    def __repr__(  # pylint: disable=invalid-repr-returned
+    def __repr__(
         self,
-    ) -> Tuple[float, float, float]:
+    ) -> tuple[float, float, float]:
         return (self.hue, self.saturation, self.value)
 
     def __str__(self) -> str:
-        return "(%s, %s, %s)" % (self.hue, self.saturation, self.value)
+        return f"({self.hue}, {self.saturation}, {self.value})"
 
     def __len__(self) -> int:
         """Retrieve total number of 'color-parts' available."""
@@ -243,9 +243,7 @@ def clamp(
     return max(lower, min(val, upper))
 
 
-def normalize(
-    val: int, inplace: Optional[bool] = False
-) -> Union[None, float, List[float]]:
+def normalize(val: int, inplace: Optional[bool] = False) -> Union[None, float, list[float]]:
     """Convert 8-bit (0 to 255) value to normalized (0.0 to 1.0) value.
 
     Accepts integer, 0 to 255 range (input is clamped) or a list or tuple
@@ -283,8 +281,8 @@ def clamp_norm(val: Union[float, int]) -> Union[float, int]:
 
 
 def denormalize(
-    val: Union[float, List[float], Tuple[float]], inplace: bool = False
-) -> Union[int, List[int]]:
+    val: Union[float, list[float], tuple[float]], inplace: bool = False
+) -> Union[int, list[int]]:
     """Convert normalized (0.0 to 1.0) value to 8-bit (0 to 255) value
 
     Accepts float, 0.0 to 1.0 range or a list or tuple of floats.  In
@@ -332,9 +330,7 @@ def unpack(val: int) -> CRGB:
     )  # Blue
 
 
-def mix(
-    color1: Union[CRGB, CHSV], color2: Union[CRGB, CHSV], weight2: float = 0.5
-) -> CRGB:
+def mix(color1: Union[CRGB, CHSV], color2: Union[CRGB, CHSV], weight2: float = 0.5) -> CRGB:
     """Blend between two colors using given ratio. Accepts two colors (each
     may be `CRGB`, `CHSV` or packed integer), and weighting (0.0 to 1.0)
     of second color.
@@ -385,12 +381,12 @@ def mix(
 GFACTOR = 2.7  # Default gamma-correction factor for function below
 
 
-def gamma_adjust(
+def gamma_adjust(  # noqa: PLR0912, too-many-branches
     val: Any,
     gamma_value: Any = None,
-    brightness: Optional[Union[float, Tuple[int, int, int]]] = 1.0,
+    brightness: Optional[Union[float, tuple[int, int, int]]] = 1.0,
     inplace: Optional[bool] = False,
-) -> Union[float, CRGB, List[Union[float, CRGB]]]:
+) -> Union[float, CRGB, list[Union[float, CRGB]]]:
     """Provides gamma adjustment for single values, `CRGB` and `CHSV` types
     and lists of any of these.
 
@@ -418,7 +414,6 @@ def gamma_adjust(
     In cases 2 and 3, there is NO return value if 'inplace' is True --
     the original values are modified.
     """
-    # pylint: disable=too-many-branches
 
     if isinstance(val, float):
         # Input value appears to be a single float
@@ -470,7 +465,7 @@ def gamma_adjust(
         if inplace:
             for i, x in enumerate(val):
                 if isinstance(x, CHSV):
-                    x = CRGB(x)
+                    x = CRGB(x)  # noqa: PLW2901 loop variable overwritten
                 val[i] = CRGB(
                     pow(x.red, gamma_red) * brightness_red,
                     pow(x.green, gamma_green) * brightness_green,
@@ -480,7 +475,7 @@ def gamma_adjust(
         newlist = []
         for x in val:
             if isinstance(x, CHSV):
-                x = CRGB(x)
+                x = CRGB(x)  # noqa: PLW2901 loop variable overwritten
             newlist.append(
                 CRGB(
                     pow(x.red, gamma_red) * brightness_red,
@@ -528,7 +523,7 @@ def gamma_adjust(
 
 
 def palette_lookup(
-    palette: Union[List[CRGB], List[CHSV], List[int]], position: float
+    palette: Union[list[CRGB], list[CHSV], list[int]], position: float
 ) -> Union[CRGB, CHSV]:
     """Fetch color from color palette, with interpolation.
 
@@ -553,11 +548,11 @@ def palette_lookup(
 
 def expand_gradient(
     gradient: Union[
-        List[List[float, Union[int, CRGB, CHSV]]],
-        Tuple[Tuple[float, Union[int, CRGB, CHSV]]],
+        list[list[float, Union[int, CRGB, CHSV]]],
+        tuple[tuple[float, Union[int, CRGB, CHSV]]],
     ],
     length: float,
-) -> List[CRGB]:
+) -> list[CRGB]:
     """Convert gradient palette into standard equal-interval palette.
 
     :param sequence gradient: List or tuple of of 2-element lists/tuples

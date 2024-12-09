@@ -1,10 +1,10 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
-""" FancyLED example for Circuit Playground Express using fastled_helpers
-"""
+"""FancyLED example for Circuit Playground Express using fastled_helpers"""
 
 from adafruit_circuitplayground.express import cpx
+
 import adafruit_fancyled.fastled_helpers as helper
 
 cpx.pixels.auto_write = False  # Refresh pixels only when we say

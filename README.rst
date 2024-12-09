@@ -14,9 +14,9 @@ Introduction
     :target: https://github.com/adafruit/Adafruit_CircuitPython_FancyLED/actions/
     :alt: Build Status
 
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
-    :alt: Code Style: Black
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Code Style: Ruff
 
 FancyLED is a CircuitPython library to assist in creating buttery smooth LED animation. It's loosely inspired by the FastLED library for Arduino, and in fact we have a "helper" library using similar function names to assist with porting of existing Arduino FastLED projects to CircuitPython.
 
