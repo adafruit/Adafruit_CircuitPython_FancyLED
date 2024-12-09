@@ -24,9 +24,6 @@ from adafruit_fancyled import adafruit_fancyled as fancy
 
 # These are helper functions that provide more FastLED-like calls for
 # fancyled functions.
-# Function names are kept the same as FastLED, which normally upsets pylint.
-# Disable name-checking so this passes muster.
-# pylint: disable=invalid-name
 
 GFACTOR = 2.5  # Default gamma-correction factor for function below
 
@@ -144,6 +141,3 @@ def hsv2rgb_spectrum(hue, sat, val):
     """
 
     return fancy.CRGB(fancy.CHSV(hue / 255, sat / 255, val / 255))
-
-
-# pylint: enable=invalid-name

@@ -55,7 +55,6 @@ class CRGB:
     """
 
     def __init__(self, red: CHSV, green: float = 0.0, blue: float = 0.0) -> None:
-        # pylint: disable=too-many-branches
         if isinstance(red, CHSV):
             # If first/only argument is a CHSV type, perform HSV to RGB
             # conversion.
@@ -188,7 +187,6 @@ class CHSV:
     HSV->RGB->HSV translations won't have the same input and output.
     """
 
-    # pylint: disable=invalid-name
     def __init__(self, h: float, s: float = 1.0, v: float = 1.0) -> None:
         if isinstance(h, float):
             self.hue: float = h  # Don't clamp! Hue can wrap around forever.
@@ -197,7 +195,7 @@ class CHSV:
         self.saturation: float = clamp_norm(s)
         self.value: float = clamp_norm(v)
 
-    def __repr__(  # pylint: disable=invalid-repr-returned
+    def __repr__(
         self,
     ) -> tuple[float, float, float]:
         return (self.hue, self.saturation, self.value)
