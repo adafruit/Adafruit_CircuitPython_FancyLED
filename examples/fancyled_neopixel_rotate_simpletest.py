@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
-""" Simple FancyLED example for NeoPixel strip
-"""
+"""Simple FancyLED example for NeoPixel strip"""
 
 import board
 import neopixel
+
 import adafruit_fancyled.adafruit_fancyled as fancy
 
 num_leds = 20
